@@ -1,0 +1,108 @@
+/* A project of dragging content to change ordering */
+<!DOCTYPE html>
+	<html>
+		<head>
+			<title>2nd solution</title>
+			<style>
+				body {
+				  margin: 0;
+				}
+
+				.container {
+				  background-color: #333;
+				  padding: 1rem;
+				  margin-top: 1rem;
+				}
+
+				.draggable {
+				  padding: 1rem;
+				  background-color: white;
+				  border: 1px solid black;
+				  cursor: move;
+				}
+
+				.draggable.dragging {
+				  opacity: .5;
+				}
+				
+				#content1 {
+				  height:40px; 
+				  width:50px; 
+				  text-align:center; 
+				  background: yellow;
+				}
+				#content2 {
+				  height:60px; 
+				  width:80px; 
+				  text-align:center; 
+				  background: green;
+				}
+				#content3 {
+				  height:50px; 
+				  width:90px;
+				  text-align:center; 
+				  background: skyblue
+				}
+				#content4 {
+				  height:95px; 
+				  width:150px;
+				  text-align:center; 
+				  background: tomato;
+				}
+			</style>
+		</head>
+		<body>
+		
+		
+		    <div class="container">
+			  <p class="draggable" id="content1" draggable="true">1</p>
+			  <p class="draggable" draggable="true" id="content2">2</p>
+        <p class="draggable" draggable="true" id="content3">3</p>
+			  <p class="draggable" draggable="true" id="content4">4</p>
+			</div>
+			
+				  
+		
+			<script>
+				const draggables = document.querySelectorAll('.draggable')
+				const containers = document.querySelectorAll('.container')
+
+				draggables.forEach(draggable => {
+				  draggable.addEventListener('dragstart', () => {
+					draggable.classList.add('dragging')
+				  })
+
+				  draggable.addEventListener('dragend', () => {
+					draggable.classList.remove('dragging')
+				  })
+				})
+
+				containers.forEach(container => {
+				  container.addEventListener('dragover', e => {
+					e.preventDefault()
+					const afterElement = getDragAfterElement(container, e.clientY)
+					const draggable = document.querySelector('.dragging')
+					if (afterElement == null) {
+					  container.appendChild(draggable)
+					} else {
+					  container.insertBefore(draggable, afterElement)
+					}
+				  })
+				})
+
+				function getDragAfterElement(container, y) {
+				  const draggableElements = [...container.querySelectorAll('.draggable:not(.dragging)')]
+
+				  return draggableElements.reduce((closest, child) => {
+					const box = child.getBoundingClientRect()
+					const offset = y - box.top - box.height / 2
+					if (offset < 0 && offset > closest.offset) {
+					  return { offset: offset, element: child }
+					} else {
+					  return closest
+					}
+				  }, { offset: Number.NEGATIVE_INFINITY }).element
+				}
+			</script>
+		</body>
+	</html>

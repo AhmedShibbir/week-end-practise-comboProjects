@@ -1,0 +1,47 @@
+/* color picker to change color */
+<!DOCTYPE html>
+<html>
+  <header>
+      <style>
+          body {
+                  font-size: 30px;
+				  text-align: center;
+				  background-color: gray;
+                };
+
+      </style>
+  </header>
+  <body>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <div class="hoverme" data-hovercolour="orange" data-normalcolour="whitesmoke" style="border:2px solid white; width: 190px; margin: 15px auto;">Hover on me</div>
+    <br>
+    <label>Select Hover color</label>
+    <input type="color" id="color-hover">
+    <br>
+    <br>
+    <label>Select normal color</label>
+    <input type="color" id="color-normal">
+    <script>
+    		// Setup the colour
+        $("#color-hover").change(function(e) {
+          var pickedColor = e.target.value;
+          $("div.hoverme").data("hovercolour", pickedColor);
+        });
+				
+        $("#color-normal").change(function(e) {
+          var pickedColor = e.target.value;
+          $("div.hoverme").data("normalcolour", pickedColor);
+        });
+        // Set the colour on hover/unhover
+
+        $("div").hover(function() {
+          var pickedColor = $(this).data("hovercolour");
+          $(this).css("color", pickedColor);
+        }, function() {
+          var normalColor = $(this).data("normalcolour")
+          $(this).css("color", normalColor);
+        });
+    </script>
+  </body>
+</html>
